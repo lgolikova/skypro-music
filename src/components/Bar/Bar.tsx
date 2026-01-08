@@ -98,7 +98,7 @@ export const Bar = () => {
                                         <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                     </svg>
                                 </div>
-                                <div
+                                {/* <div
                                     className={classNames(
                                         styles.trackPlay__dislike,
                                         styles.btnIcon
@@ -109,7 +109,7 @@ export const Bar = () => {
                                     >
                                         <use xlinkHref="/images/icons/sprite.svg#icon-dislike"></use>
                                     </svg>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
