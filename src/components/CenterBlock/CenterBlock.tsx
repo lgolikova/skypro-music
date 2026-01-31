@@ -7,7 +7,7 @@ export const CenterBlock = () => {
         <div className={styles.centerblock}>
             <div className={styles.centerblock__search}>
                 <svg className={styles.search__svg}>
-                    <use xlinkHref="/Image/icon/sprite.svg#icon-search"></use>
+                    <use xlinkHref="/images/icons/sprite.svg#icon-search"></use>
                 </svg>
                 <input
                     className={styles.search__text}
@@ -56,7 +56,7 @@ export const CenterBlock = () => {
                         )}
                     >
                         <svg className={styles.playlistTitle__svg}>
-                            <use xlinkHref="/Image/icon/sprite.svg#icon-watch"></use>
+                            <use xlinkHref="/images/icons/sprite.svg#icon-watch"></use>
                         </svg>
                     </div>
                 </div>
@@ -66,7 +66,7 @@ export const CenterBlock = () => {
                             <div className={styles.track__title}>
                                 <div className={styles.track__titleImage}>
                                     <svg className={styles.track__titleSvg}>
-                                        <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.track__titleText}>
@@ -99,7 +99,7 @@ export const CenterBlock = () => {
                             </div>
                             <div className={styles.track__time}>
                                 <svg className={styles.track__timeSvg}>
-                                    <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                 </svg>
                                 <span className={styles.track__timeText}>
                                     4:44
@@ -113,7 +113,7 @@ export const CenterBlock = () => {
                             <div className={styles.track__title}>
                                 <div className={styles.track__titleImage}>
                                     <svg className={styles.track__titleSvg}>
-                                        <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.track__titleText}>
@@ -146,7 +146,7 @@ export const CenterBlock = () => {
                             </div>
                             <div className={styles.track__time}>
                                 <svg className={styles.track__timeSvg}>
-                                    <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                 </svg>
                                 <span className={styles.track__timeText}>
                                     2:22
@@ -160,7 +160,7 @@ export const CenterBlock = () => {
                             <div className={styles.track__title}>
                                 <div className={styles.track__titleImage}>
                                     <svg className={styles.track__titleSvg}>
-                                        <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.track__titleText}>
@@ -193,7 +193,7 @@ export const CenterBlock = () => {
                             </div>
                             <div className={styles.track__time}>
                                 <svg className={styles.track__timeSvg}>
-                                    <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                 </svg>
                                 <span className={styles.track__timeText}>
                                     2:22
@@ -207,7 +207,7 @@ export const CenterBlock = () => {
                             <div className={styles.track__title}>
                                 <div className={styles.track__titleImage}>
                                     <svg className={styles.track__titleSvg}>
-                                        <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.track__titleText}>
@@ -242,7 +242,7 @@ export const CenterBlock = () => {
                             </div>
                             <div className={styles.track__time}>
                                 <svg className={styles.track__timeSvg}>
-                                    <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                 </svg>
                                 <span className={styles.track__timeText}>
                                     4:12
@@ -256,7 +256,7 @@ export const CenterBlock = () => {
                             <div className={styles.track__title}>
                                 <div className={styles.track__titleImage}>
                                     <svg className={styles.track__titleSvg}>
-                                        <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div>
@@ -291,7 +291,7 @@ export const CenterBlock = () => {
                             </div>
                             <div className={styles.track__time}>
                                 <svg className={styles.track__timeSvg}>
-                                    <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
                                 </svg>
                                 <span className={styles.track__timeText}>
                                     2:54
