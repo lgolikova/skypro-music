@@ -14,7 +14,7 @@ export const TrackItem = ({ track }: Props) => {
                 <div className={styles.track__title}>
                     <div className={styles.track__titleImage}>
                         <svg className={styles.track__titleSvg}>
-                            <use xlinkHref="/Image/icon/sprite.svg#icon-note"></use>
+                            <use xlinkHref="/images/icons/note.svg"></use>
                         </svg>
                     </div>
                     <div className={styles.track__titleText}>
@@ -39,7 +39,7 @@ export const TrackItem = ({ track }: Props) => {
                 </div>
                 <div className={styles.track__time}>
                     <svg className={styles.track__timeSvg}>
-                        <use xlinkHref="/Image/icon/sprite.svg#icon-like"></use>
+                        <use xlinkHref="/images/icons/like.svg"></use>
                     </svg>
                     <span className={styles.track__timeText}>
                         {formatTime(track.duration_in_seconds)}

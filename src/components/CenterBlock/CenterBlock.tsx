@@ -98,7 +98,7 @@ export const CenterBlock = () => {
         <div className={styles.centerblock}>
             <div className={styles.centerblock__search}>
                 <svg className={styles.search__svg}>
-                    <use xlinkHref="/Image/icon/sprite.svg#icon-search"></use>
+                    <use xlinkHref="/images/icons/search.svg"></use>
                 </svg>
                 <input
                     className={styles.search__text}
@@ -170,7 +170,7 @@ export const CenterBlock = () => {
                         )}
                     >
                         <svg className={styles.playlistTitle__svg}>
-                            <use xlinkHref="/Image/icon/sprite.svg#icon-watch"></use>
+                            <use xlinkHref="/images/icons/watch.svg"></use>
                         </svg>
                     </div>
                 </div>
