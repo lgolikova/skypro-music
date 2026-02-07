@@ -145,7 +145,7 @@ export const Bar = () => {
                                     )}
                                 >
                                     <svg className={styles.trackPlay__likeSvg}>
-                                        <use xlinkHref="/images/icons/note.svg"></use>
+                                        <use xlinkHref="/images/icons/like.svg"></use>
                                     </svg>
                                 </div>
                                 <div
