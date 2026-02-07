@@ -10,6 +10,9 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
 }
 
@@ -24,7 +27,12 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
@@ -32,8 +40,15 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
     justify-content: flex-start;
 }
 
@@ -42,16 +57,21 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     padding: 0 92px 0 0;
 }
 
-/* ===== PLAYER ===== */
+/* PLAYER */
 
 .player__controls {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
     padding: 0 27px 0 31px;
 }
@@ -65,6 +85,8 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -81,7 +103,8 @@
     margin-right: 23px;
 }
 
-.player__btnPlaySvg {
+.player__btnPlaySvg,
+.player__btnPauseSvg {
     width: 22px;
     height: 20px;
     fill: #d9d9d9;
@@ -114,6 +137,8 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -128,18 +153,29 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
     flex-direction: row;
 }
 
-/* ===== TRACK PLAY ===== */
+.audio {
+    display: none;
+}
+
+/* TRACK PLAY */
 
 .trackPlay__contain {
     width: auto;
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: auto 1fr;
     grid-template-columns: auto 1fr;
     grid-template-areas:
         "image author"
         "image album";
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -150,7 +186,11 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     margin-right: 12px;
     grid-area: image;
@@ -169,6 +209,7 @@
 }
 
 .trackPlay__authorLink {
+    font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -182,6 +223,7 @@
 }
 
 .trackPlay__albumLink {
+    font-style: normal;
     font-weight: 400;
     font-size: 13px;
     line-height: 24px;
@@ -192,7 +234,8 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     margin-left: 26%;
 }
@@ -200,7 +243,6 @@
 .trackPlay__like,
 .trackPlay__dislike {
     padding: 5px;
-    padding-top: 15px;
 }
 
 .trackPlay__likeSvg {
@@ -221,14 +263,17 @@
     stroke: #696969;
 }
 
-/* ===== VOLUME ===== */
+/* VOLUME */
 
 .volume__content {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
     justify-content: end;
 }
 
@@ -273,11 +318,10 @@
     background: #1a1a1a;
     border: 2px solid white;
     border-radius: 50%;
-    position: relative;
     margin-top: -7px;
 }
 
-/* ===== BUTTONS ===== */
+/* BUTTONS */
 
 .btn {
     cursor: pointer;
@@ -286,20 +330,17 @@
 .btnIcon:hover svg {
     fill: transparent;
     stroke: #acacac;
-    cursor: pointer;
 }
 
 .btnIcon:active svg {
     fill: transparent;
     stroke: #ffffff;
-    cursor: pointer;
 }
 
 .btnIcon:active .trackPlay__likeSvg,
 .btnIcon:active .trackPlay__dislikeSvg {
     fill: #696969;
     stroke: #ffffff;
-    cursor: pointer;
 }
 
 .btn-text:hover {
