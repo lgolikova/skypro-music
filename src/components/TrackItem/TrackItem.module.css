@@ -63,6 +63,7 @@
     -ms-flex-pack: center;
     justify-content: center;
     margin-right: 17px;
+    cursor: pointer;
 }
 
 .track__titleSvg {
@@ -78,6 +79,7 @@
     font-size: 16px;
     line-height: 24px;
     color: #ffffff;
+    cursor: pointer;
 }
 
 .track__titleSpan {
@@ -86,6 +88,7 @@
     font-size: 16px;
     line-height: 24px;
     color: #4e4e4e;
+    cursor: pointer;
 }
 
 .track__author {
@@ -96,6 +99,7 @@
     -webkit-box-pack: start;
     -ms-flex-pack: start;
     justify-content: flex-start;
+    cursor: pointer;
 }
 
 .track__authorLink {
@@ -117,6 +121,7 @@
     font-size: 16px;
     line-height: 24px;
     color: #696969;
+    cursor: pointer;
 }
 
 .track__timeSvg {
@@ -125,6 +130,7 @@
     margin-right: 17px;
     fill: transparent;
     stroke: #696969;
+    cursor: pointer;
 }
 
 .track__timeText {
@@ -134,4 +140,31 @@
     line-height: 24px;
     text-align: right;
     color: #696969;
+}
+
+.track__circle {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ad61ff;
+    animation: pulse 0.6s ease-in-out infinite both;
+}
+
+.track__circleStatic {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ad61ff;
+}
+
+@keyframes pulse {
+    0%,
+    to {
+        transform: scale(0.5);
+    }
+    50% {
+        transform: scale(1);
+    }
 }

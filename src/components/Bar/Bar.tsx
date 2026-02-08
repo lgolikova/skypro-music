@@ -1,10 +1,53 @@
+"use client";
+
+import { setIsPlay } from "@/store/features/trackSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import classNames from "classnames";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import styles from "./Bar.module.css";
 
 export const Bar = () => {
+    const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+    const isPlay = useAppSelector((state) => state.tracks.isPlay);
+    const dispatch = useAppDispatch();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        if (!audioRef.current) return;
+        if (!currentTrack) return;
+
+        if (isPlay) {
+            audioRef.current
+                .play()
+                .catch((err) => console.log("Play error:", err));
+        } else {
+            audioRef.current.pause();
+        }
+    }, [currentTrack, isPlay]);
+
+    const togglePlay = () => {
+        if (!audioRef.current) return;
+
+        if (isPlay) {
+            audioRef.current.pause();
+            dispatch(setIsPlay(false));
+        } else {
+            audioRef.current.play();
+            dispatch(setIsPlay(true));
+        }
+    };
+
+    if (!currentTrack) return <></>;
+
     return (
         <div className={styles.bar}>
+            <audio
+                className={styles.audio}
+                ref={audioRef}
+                controls
+                src={currentTrack?.track_file}
+            ></audio>
             <div className={styles.bar__content}>
                 <div className={styles.bar__playerProgress}></div>
                 <div className={styles.bar__playerBlock}>
@@ -17,7 +60,7 @@ export const Bar = () => {
                         <div className={styles.player__controls}>
                             <div className={styles.player__btnPrev}>
                                 <svg className={styles.player__btnPrevSvg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-prev"></use>
+                                    <use xlinkHref="/images/icons/prev.svg"></use>
                                 </svg>
                             </div>
                             <div
@@ -25,14 +68,21 @@ export const Bar = () => {
                                     styles.player__btnPlay,
                                     styles.btn
                                 )}
+                                onClick={togglePlay}
                             >
-                                <svg className={styles.player__btnPlaySvg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-play"></use>
-                                </svg>
+                                {isPlay ? (
+                                    <svg className={styles.player__btnPauseSvg}>
+                                        <use xlinkHref="/images/icons/pause.svg"></use>
+                                    </svg>
+                                ) : (
+                                    <svg className={styles.player__btnPlaySvg}>
+                                        <use xlinkHref="/images/icons/play.svg"></use>
+                                    </svg>
+                                )}
                             </div>
                             <div className={styles.player__btnNext}>
                                 <svg className={styles.player__btnNextSvg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-next"></use>
+                                    <use xlinkHref="/images/icons/next.svg"></use>
                                 </svg>
                             </div>
                             <div
@@ -42,7 +92,7 @@ export const Bar = () => {
                                 )}
                             >
                                 <svg className={styles.player__btnRepeatSvg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-repeat"></use>
+                                    <use xlinkHref="/images/icons/repeat.svg"></use>
                                 </svg>
                             </div>
                             <div
@@ -52,7 +102,7 @@ export const Bar = () => {
                                 )}
                             >
                                 <svg className={styles.player__btnShuffleSvg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-shuffle"></use>
+                                    <use xlinkHref="/images/icons/shuffle.svg"></use>
                                 </svg>
                             </div>
                         </div>
@@ -66,7 +116,7 @@ export const Bar = () => {
                             <div className={styles.trackPlay__contain}>
                                 <div className={styles.trackPlay__image}>
                                     <svg className={styles.trackPlay__svg}>
-                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
+                                        <use xlinkHref="/images/icons/note.svg"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.trackPlay__author}>
@@ -74,7 +124,7 @@ export const Bar = () => {
                                         className={styles.trackPlay__authorLink}
                                         href=""
                                     >
-                                        Ты та...
+                                        {currentTrack?.name}
                                     </Link>
                                 </div>
                                 <div className={styles.trackPlay__album}>
@@ -82,7 +132,7 @@ export const Bar = () => {
                                         className={styles.trackPlay__albumLink}
                                         href=""
                                     >
-                                        Баста
+                                        {currentTrack?.author}
                                     </Link>
                                 </div>
                             </div>
@@ -95,10 +145,10 @@ export const Bar = () => {
                                     )}
                                 >
                                     <svg className={styles.trackPlay__likeSvg}>
-                                        <use xlinkHref="/images/icons/sprite.svg#icon-like"></use>
+                                        <use xlinkHref="/images/icons/like.svg"></use>
                                     </svg>
                                 </div>
-                                {/* <div
+                                <div
                                     className={classNames(
                                         styles.trackPlay__dislike,
                                         styles.btnIcon
@@ -107,9 +157,9 @@ export const Bar = () => {
                                     <svg
                                         className={styles.trackPlay__dislikeSvg}
                                     >
-                                        <use xlinkHref="/images/icons/sprite.svg#icon-dislike"></use>
+                                        <use xlinkHref="/images/icons/dislike.svg"></use>
                                     </svg>
-                                </div> */}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +167,7 @@ export const Bar = () => {
                         <div className={styles.volume__content}>
                             <div className={styles.volume__image}>
                                 <svg className={styles.volume__svg}>
-                                    <use xlinkHref="/images/icons/sprite.svg#icon-volume"></use>
+                                    <use xlinkHref="/images/icons/volume.svg"></use>
                                 </svg>
                             </div>
                             <div
