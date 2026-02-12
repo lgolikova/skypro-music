@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Bar.module.css";
+import { formatTime } from "@/utils/formatTime";
 
 export const Bar = () => {
     const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -158,6 +159,10 @@ export const Bar = () => {
                             styles.player
                         )}
                     >
+                        <div className={styles.player__time}>
+                            {formatTime(Math.floor(currentTime))} /{" "}
+                            {formatTime(Math.floor(duration))}
+                        </div>
                         <div className={styles.player__controls}>
                             <div
                                 className={styles.player__btnPrev}

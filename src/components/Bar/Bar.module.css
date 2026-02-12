@@ -400,3 +400,18 @@
     color: #ad61ff;
     cursor: pointer;
 }
+
+/* TIME */
+.player {
+    position: relative;
+}
+
+.player__time {
+    position: absolute;
+    left: 35px;
+    bottom: 120%;
+    font-size: 16px;
+    z-index: 10000;
+    color: #b672ff;
+    font-weight: 600;
+}
