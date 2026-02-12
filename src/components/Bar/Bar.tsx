@@ -1,10 +1,18 @@
 "use client";
 
-import { setIsPlay } from "@/store/features/trackSlice";
+import {
+    playNext,
+    playPrev,
+    setIsPlay,
+    setVolume,
+    toggleRepeat,
+    toggleShuffle,
+} from "@/store/features/trackSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import classNames from "classnames";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Bar.module.css";
 
 export const Bar = () => {
@@ -12,11 +20,21 @@ export const Bar = () => {
     const isPlay = useAppSelector((state) => state.tracks.isPlay);
     const dispatch = useAppDispatch();
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const isRepeat = useAppSelector((state) => state.tracks.isRepeat);
+    const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
+    const volume = useAppSelector((state) => state.tracks.volume);
+    const [isLoadedTrack, setIsLoadedTrack] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [isSeeking, setIsSeeking] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [prevVolume, setPrevVolume] = useState(0.5);
 
     useEffect(() => {
         if (!audioRef.current) return;
         if (!currentTrack) return;
 
+        audioRef.current.volume = volume;
         if (isPlay) {
             audioRef.current
                 .play()
@@ -24,7 +42,7 @@ export const Bar = () => {
         } else {
             audioRef.current.pause();
         }
-    }, [currentTrack, isPlay]);
+    }, [currentTrack, isPlay, volume]);
 
     const togglePlay = () => {
         if (!audioRef.current) return;
@@ -38,6 +56,75 @@ export const Bar = () => {
         }
     };
 
+    const onToggleShuffle = () => {
+        dispatch(toggleShuffle());
+    };
+
+    const toggleMute = () => {
+        if (isMuted) {
+            dispatch(setVolume(prevVolume));
+            setIsMuted(false);
+        } else {
+            setPrevVolume(volume);
+            dispatch(setVolume(0));
+            setIsMuted(true);
+        }
+    };
+
+    const onChangeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number(e.target.value) / 100;
+        dispatch(setVolume(value));
+        if (value > 0 && isMuted) setIsMuted(false);
+        if (value === 0 && !isMuted) setIsMuted(true);
+        if (value > 0) setPrevVolume(value);
+    };
+
+    useEffect(() => {
+        if (currentTrack) {
+            setIsLoadedTrack(false);
+        }
+    }, [currentTrack]);
+
+    const onTimeUpdate = () => {
+        if (audioRef.current && !isSeeking) {
+            setCurrentTime(audioRef.current.currentTime);
+        }
+    };
+
+    const onSeekStart = () => {
+        if (!isLoadedTrack) return;
+        setIsSeeking(true);
+    };
+
+    const onSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!isLoadedTrack) return;
+        const value = Number(e.target.value);
+        setCurrentTime(value);
+    };
+
+    const onSeekEnd = () => {
+        if (!isLoadedTrack) return;
+        if (audioRef.current) {
+            audioRef.current.currentTime = currentTime;
+        }
+        setIsSeeking(false);
+    };
+
+    const onLoadedMetadata = () => {
+        if (audioRef.current) {
+            setDuration(audioRef.current.duration);
+            setIsLoadedTrack(true);
+        }
+    };
+
+    const onEnded = () => {
+        if (isRepeat) {
+            audioRef.current?.play();
+        } else {
+            dispatch(playNext());
+        }
+    };
+
     if (!currentTrack) return <></>;
 
     return (
@@ -47,9 +134,23 @@ export const Bar = () => {
                 ref={audioRef}
                 controls
                 src={currentTrack?.track_file}
+                loop={isRepeat}
+                onTimeUpdate={onTimeUpdate}
+                onLoadedMetadata={onLoadedMetadata}
+                onEnded={onEnded}
             ></audio>
             <div className={styles.bar__content}>
-                <div className={styles.bar__playerProgress}></div>
+                <ProgressBar
+                    max={duration || 0}
+                    value={currentTime}
+                    readOnly={!isLoadedTrack}
+                    step={0.01}
+                    onChange={onSeekChange}
+                    onMouseDown={onSeekStart}
+                    onMouseUp={onSeekEnd}
+                    onTouchStart={onSeekStart}
+                    onTouchEnd={onSeekEnd}
+                />
                 <div className={styles.bar__playerBlock}>
                     <div
                         className={classNames(
@@ -58,7 +159,10 @@ export const Bar = () => {
                         )}
                     >
                         <div className={styles.player__controls}>
-                            <div className={styles.player__btnPrev}>
+                            <div
+                                className={styles.player__btnPrev}
+                                onClick={() => dispatch(playPrev())}
+                            >
                                 <svg className={styles.player__btnPrevSvg}>
                                     <use xlinkHref="/images/icons/prev.svg"></use>
                                 </svg>
@@ -66,9 +170,12 @@ export const Bar = () => {
                             <div
                                 className={classNames(
                                     styles.player__btnPlay,
-                                    styles.btn
+                                    styles.btn,
+                                    {
+                                        [styles.disabled]: !isLoadedTrack,
+                                    }
                                 )}
-                                onClick={togglePlay}
+                                onClick={isLoadedTrack ? togglePlay : undefined}
                             >
                                 {isPlay ? (
                                     <svg className={styles.player__btnPauseSvg}>
@@ -80,7 +187,10 @@ export const Bar = () => {
                                     </svg>
                                 )}
                             </div>
-                            <div className={styles.player__btnNext}>
+                            <div
+                                className={styles.player__btnNext}
+                                onClick={() => dispatch(playNext())}
+                            >
                                 <svg className={styles.player__btnNextSvg}>
                                     <use xlinkHref="/images/icons/next.svg"></use>
                                 </svg>
@@ -90,8 +200,16 @@ export const Bar = () => {
                                     styles.player__btnRepeat,
                                     styles.btnIcon
                                 )}
+                                onClick={() => dispatch(toggleRepeat())}
                             >
-                                <svg className={styles.player__btnRepeatSvg}>
+                                <svg
+                                    className={classNames(
+                                        styles.player__btnRepeatSvg,
+                                        {
+                                            [styles.repeat]: isRepeat,
+                                        }
+                                    )}
+                                >
                                     <use xlinkHref="/images/icons/repeat.svg"></use>
                                 </svg>
                             </div>
@@ -100,8 +218,16 @@ export const Bar = () => {
                                     styles.player__btnShuffle,
                                     styles.btnIcon
                                 )}
+                                onClick={onToggleShuffle}
                             >
-                                <svg className={styles.player__btnShuffleSvg}>
+                                <svg
+                                    className={classNames(
+                                        styles.player__btnShuffleSvg,
+                                        {
+                                            [styles.shuffleActive]: isShuffle,
+                                        }
+                                    )}
+                                >
                                     <use xlinkHref="/images/icons/shuffle.svg"></use>
                                 </svg>
                             </div>
@@ -165,9 +291,18 @@ export const Bar = () => {
                     </div>
                     <div className={styles.bar__volumeBlock}>
                         <div className={styles.volume__content}>
-                            <div className={styles.volume__image}>
+                            <div
+                                className={styles.volume__image}
+                                onClick={toggleMute}
+                            >
                                 <svg className={styles.volume__svg}>
-                                    <use xlinkHref="/images/icons/volume.svg"></use>
+                                    <use
+                                        xlinkHref={
+                                            isMuted || volume === 0
+                                                ? "/images/icons/mute.svg"
+                                                : "/images/icons/volume.svg"
+                                        }
+                                    />
                                 </svg>
                             </div>
                             <div
@@ -183,6 +318,8 @@ export const Bar = () => {
                                     )}
                                     type="range"
                                     name="range"
+                                    value={volume * 100}
+                                    onChange={onChangeVolume}
                                 />
                             </div>
                         </div>
