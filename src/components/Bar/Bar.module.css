@@ -159,8 +159,54 @@
     flex-direction: row;
 }
 
+.player __btnPrev,
+.player __btnNext,
+.player __btnPlay {
+    cursor: pointer;
+}
+
+.player __btnPrev svg,
+.player __btnNext svg,
+.player __btnPlay svg {
+    fill: #d9d9d9;
+    transition:
+        fill 0.2s,
+        stroke 0.2s;
+}
+
+.player __btnPrev:hover svg,
+.player __btnNext:hover svg,
+.player __btnPlay:hover svg {
+    fill: #696969;
+}
+
+.player __btnPrev:active svg,
+.player __btnNext:active svg,
+.player __btnPlay:active svg {
+    fill: #ffffff;
+}
+
+.player __btnPauseSvg:hover {
+    fill: #696969;
+}
+
+.player __btnPauseSvg:active {
+    fill: #ffffff;
+}
+
+.repeat,
+.shuffleActive {
+    stroke: #ffffff;
+}
+
 .audio {
     display: none;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 /* TRACK PLAY */
@@ -353,4 +399,19 @@
     border-color: #ad61ff;
     color: #ad61ff;
     cursor: pointer;
+}
+
+/* TIME */
+.player {
+    position: relative;
+}
+
+.player__time {
+    position: absolute;
+    left: 35px;
+    bottom: 120%;
+    font-size: 16px;
+    z-index: 10000;
+    color: #b672ff;
+    font-weight: 600;
 }
