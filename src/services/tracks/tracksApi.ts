@@ -3,7 +3,7 @@ import { BASE_API_URL } from "../constants";
 
 export const getTracks = async (
     selectionId?: string,
-    token?: string
+    token?: string | null
 ): Promise<any> => {
     try {
         if (!selectionId) {

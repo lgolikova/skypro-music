@@ -8,7 +8,7 @@ export interface Track {
     release_date: string;
     staredUser: [];
     track_file: string;
-    _id: number;
+    _id: string;
 }
 
 export interface SelectionResponse {
