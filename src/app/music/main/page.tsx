@@ -1,21 +1,40 @@
-import { CenterBlock } from "@/components/CenterBlock/CenterBlock";
-import { Nav } from "@/components/Nav/Nav";
-import { Bar } from "@/components/Bar/Bar";
-import { Sidebar } from "@/components/Sidebar/Sidebar";
-import styles from "./page.module.css";
+"use client";
+
+import { getTracks } from "@/services/tracks/tracksApi";
+import { Track } from "@/types/track";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { MusicTemplate } from "../MusicTemplate";
 
 export default function Home() {
+    const [tracks, setTracks] = useState<Track[]>([]);
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [categoryName, setCategoryName] = useState<string>("Треки");
+
+    useEffect(() => {
+        setIsLoading(true);
+        getTracks()
+            .then((res) => {
+                setTracks(res);
+                setError("");
+            })
+            .catch((error) => {
+                if (error instanceof AxiosError) {
+                    if (error.response) setError(error.response.data);
+                    else if (error.request) setError("Что-то с интернетом");
+                    else setError("Неизвестная ошибка");
+                }
+            })
+            .finally(() => setIsLoading(false));
+    }, []);
+
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.container}>
-                <main className={styles.main}>
-                    <Nav />
-                    <CenterBlock />
-                    <Sidebar />
-                </main>
-                <Bar />
-                <footer className="footer"></footer>
-            </div>
-        </div>
+        <MusicTemplate
+            categoryName={categoryName}
+            tracks={tracks}
+            error={error}
+            isLoading={isLoading}
+        />
     );
 }
