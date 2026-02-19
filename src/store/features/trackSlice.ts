@@ -11,6 +11,8 @@ type initialStateType = {
     isRepeat: boolean;
     isShuffle: boolean;
     volume: number;
+    fetchError: null | string;
+    fetchIsLoading: boolean;
 };
 
 const initialState: initialStateType = {
@@ -23,6 +25,8 @@ const initialState: initialStateType = {
     isRepeat: false,
     isShuffle: false,
     volume: 0.5,
+    fetchError: null,
+    fetchIsLoading: true,
 };
 
 const trackSlice = createSlice({
@@ -106,6 +110,12 @@ const trackSlice = createSlice({
         setVolume: (state, action: PayloadAction<number>) => {
             state.volume = action.payload;
         },
+        setFetchError: (state, action: PayloadAction<string>) => {
+            state.fetchError = action.payload;
+        },
+        setFetchIsLoading: (state, action: PayloadAction<boolean>) => {
+            state.fetchIsLoading = action.payload;
+        },
     },
 });
 
@@ -120,5 +130,7 @@ export const {
     toggleShuffle,
     playNext,
     playPrev,
+    setFetchError,
+    setFetchIsLoading,
 } = trackSlice.actions;
 export const trackSliceReducer = trackSlice.reducer;
