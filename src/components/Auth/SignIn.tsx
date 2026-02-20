@@ -13,7 +13,7 @@ export const Signin = () => {
                             <a href="/music/main">
                                 <div className={styles.modal__logo}>
                                     <Image
-                                        src="/img/logo_modal.png"
+                                        src="/images/icons/logo_modal.png"
                                         alt="logo"
                                     />
                                 </div>
