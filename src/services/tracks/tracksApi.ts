@@ -1,28 +1,31 @@
 import axios from "axios";
-import { Track } from "../../types/track";
+import { Track, SelectionData } from "../../types/track";
 import { BASE_API_URL } from "../constants";
 
-export const getTracks = async (
+export function getTracks(): Promise<Track[]>;
+export function getTracks(
+    selectionId: string,
+    token?: string | null
+): Promise<SelectionData>;
+
+export async function getTracks(
     selectionId?: string,
     token?: string | null
-): Promise<Track[]> => {
-    try {
-        if (!selectionId) {
-            const res = await axios.get(`${BASE_API_URL}/catalog/track/all/`);
-            return res.data.data || [];
-        }
-
-        const res = await axios.get(
-            `${BASE_API_URL}/catalog/selection/${selectionId}/`,
-            {
-                headers: token ? { Authorization: `Bearer ${token}` } : {},
-            }
-        );
-        return res.data.data;
-    } catch (err) {
-        throw err;
+): Promise<Track[] | SelectionData> {
+    if (!selectionId) {
+        const res = await axios.get(`${BASE_API_URL}/catalog/track/all/`);
+        return res.data.data || [];
     }
-};
+
+    const res = await axios.get(
+        `${BASE_API_URL}/catalog/selection/${selectionId}/`,
+        {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+    );
+
+    return res.data.data;
+}
 
 export const addLike = (access: string, id: number) => {
     return axios.post(

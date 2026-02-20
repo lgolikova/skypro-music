@@ -7,7 +7,7 @@ import { CenterBlock } from "../../../../components/CenterBlock/CenterBlock";
 import { getTracks } from "../../../../services/tracks/tracksApi";
 import { setAllTracks, setTracks } from "../../../../store/features/trackSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/store";
-import { Track } from "../../../../types/track";
+import { Track, SelectionData } from "../../../../types/track";
 
 export default function CategoryPage() {
     const { id } = useParams<{ id: string }>();

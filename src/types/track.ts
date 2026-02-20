@@ -11,7 +11,7 @@ export interface Track {
     stared_user: any[];
 }
 
-export interface selectionData {
+export interface SelectionData {
     name: string;
-    items: number[];
+    items: string[];
 }
