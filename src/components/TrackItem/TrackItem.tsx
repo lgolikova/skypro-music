@@ -1,9 +1,10 @@
 "use client";
 
-import { setCurrentTrack, setIsPlay } from "@/store/features/trackSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { Track } from "@/types/track";
-import { formatTime } from "@/utils/formatTime";
+import { useLikeTrack } from "../../app/hooks/useLikeTracks";
+import { setCurrentTrack, setIsPlay } from "../../store/features/trackSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { Track } from "../../types/track";
+import { formatTime } from "../../utils/formatTime";
 import styles from "./TrackItem.module.css";
 
 type Props = {
@@ -14,6 +15,10 @@ export const TrackItem = ({ track }: Props) => {
     const dispatch = useAppDispatch();
     const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
     const isPlay = useAppSelector((state) => state.tracks.isPlay);
+    const { toggleLike, isLike } = useLikeTrack(track);
+    const isAuthenticated = useAppSelector(
+        (state) => state.auth.isAuthenticated
+    );
 
     const onClickTrack = () => {
         if (currentTrack?._id === track._id) {
@@ -22,6 +27,10 @@ export const TrackItem = ({ track }: Props) => {
             dispatch(setCurrentTrack(track));
             dispatch(setIsPlay(true));
         }
+    };
+
+    const doAuth = () => {
+        alert("Чтобы лайкнуть трек необходимо зарегистрироваться");
     };
 
     return (
@@ -60,8 +69,20 @@ export const TrackItem = ({ track }: Props) => {
                     </span>
                 </div>
                 <div className={styles.track__time}>
-                    <svg className={styles.track__timeSvg}>
-                        <use xlinkHref="/images/icons/like.svg"></use>
+                    <svg
+                        className={`${styles.track__timeSvg} ${isLike ? styles.liked : ""} ${isAuthenticated ? "" : styles.dislike}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (isAuthenticated) {
+                                toggleLike();
+                            } else {
+                                doAuth();
+                            }
+                        }}
+                    >
+                        <use
+                            xlinkHref={`/images/icons/${isLike ? "like.svg" : "dislike.svg"}`}
+                        ></use>
                     </svg>
                     <span className={styles.track__timeText}>
                         {formatTime(track.duration_in_seconds)}

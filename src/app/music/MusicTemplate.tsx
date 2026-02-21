@@ -26,6 +26,7 @@ export const MusicTemplate = ({
                 <main className={styles.main}>
                     <Nav />
                     <CenterBlock
+                        title={"Треки"}
                         tracks={tracks}
                         error={error}
                         isLoading={isLoading}

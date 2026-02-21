@@ -1,79 +1,96 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-type User = {
-    email: string;
-    username: string;
-    _id: number;
-};
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AppDispatch } from '../store'
 
-type AuthState = {
-    user: User | null;
-    token: string | null;
-    isAuthenticated: boolean;
-};
+export type User = {
+	email: string
+	username: string
+	_id: number
+}
+
+export type AuthState = {
+	user: User | null
+	access: string | null
+	refresh: string | null
+	isAuthenticated: boolean
+}
 
 const initialState: AuthState = {
-    user: null,
-    token: null,
-    isAuthenticated: false,
-};
+	user: null,
+	access: null,
+	refresh: null,
+	isAuthenticated: false,
+}
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        setCredentials: (
-            state,
-            action: PayloadAction<{ user: User; token?: string }>
-        ) => {
-            state.user = action.payload.user;
-            state.token = action.payload.token ?? null;
-            state.isAuthenticated = true;
+	name: 'auth',
+	initialState,
+	reducers: {
+		setCredentials: (
+			state,
+			action: PayloadAction<{ user: User; access?: string; refresh?: string }>,
+		) => {
+			const { user, access, refresh } = action.payload
 
-            if (typeof window !== "undefined") {
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(action.payload.user)
-                );
-                if (action.payload.token)
-                    localStorage.setItem("token", action.payload.token);
-            }
-        },
-        logout: (state) => {
-            state.user = null;
-            state.token = null;
-            state.isAuthenticated = false;
-            if (typeof window !== "undefined") {
-                localStorage.removeItem("user");
-                localStorage.removeItem("token");
-            }
-        },
-        restoreSession: (state) => {
-            if (typeof window !== "undefined") {
-                const user = localStorage.getItem("user");
-                const token = localStorage.getItem("token");
-                if (user && token) {
-                    state.user = JSON.parse(user);
-                    state.token = token;
-                    state.isAuthenticated = true;
-                }
-            }
-        },
-    },
-});
+			state.user = user
+			state.access = access ?? state.access
+			state.refresh = refresh ?? state.refresh
+			state.isAuthenticated = true
 
-export const { setCredentials, logout, restoreSession } = authSlice.actions;
-export const authReducer = authSlice.reducer;
+			if (typeof window !== 'undefined') {
+				localStorage.setItem('user', JSON.stringify(user))
+				if (access) localStorage.setItem('access', access)
+				if (refresh) localStorage.setItem('refresh', refresh)
+			}
+		},
+		logout: state => {
+			state.user = null
+			state.access = null
+			state.refresh = null
+			state.isAuthenticated = false
+
+			if (typeof window !== 'undefined') {
+				localStorage.removeItem('user')
+				localStorage.removeItem('access')
+				localStorage.removeItem('refresh')
+			}
+		},
+		restoreSession: state => {
+			if (typeof window !== 'undefined') {
+				const user = localStorage.getItem('user')
+				const access = localStorage.getItem('access')
+				const refresh = localStorage.getItem('refresh')
+
+				if (user && access && refresh) {
+					state.user = JSON.parse(user)
+					state.access = access
+					state.refresh = refresh
+					state.isAuthenticated = true
+				}
+			}
+		},
+	},
+})
+
+export const { setCredentials, logout, restoreSession } = authSlice.actions
+export const authReducer = authSlice.reducer
 
 export const restoreSessionAsync = () => (dispatch: AppDispatch) => {
-    if (typeof window !== "undefined") {
-        const user = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
+	if (typeof window !== 'undefined') {
+		const user = localStorage.getItem('user')
+		const access = localStorage.getItem('access')
+		const refresh = localStorage.getItem('refresh')
 
-        if (user && token) {
-            dispatch(setCredentials({ user: JSON.parse(user), token }));
-            return true;
-        }
-    }
+		if (user && (access || refresh)) {
+			dispatch(
+				setCredentials({
+					user: JSON.parse(user),
+					access: access ?? undefined,
+					refresh: refresh ?? undefined,
+				}),
+			)
+			return true
+		}
+	}
 
-    return false;
-};
+	return false
+}

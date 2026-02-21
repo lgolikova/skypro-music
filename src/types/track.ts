@@ -1,17 +1,17 @@
 export interface Track {
-    album: string;
-    author: string;
-    duration_in_seconds: number;
-    genre: string[];
-    logo: string | null;
-    name: string;
-    release_date: string;
-    staredUser: [];
-    track_file: string;
     _id: string;
+    name: string;
+    author: string;
+    release_date: string;
+    genre: string[];
+    duration_in_seconds: number;
+    album: string;
+    logo: string | null;
+    track_file: string;
+    stared_user: any[];
 }
 
-export interface SelectionResponse {
+export interface SelectionData {
     name: string;
-    items: number[];
+    items: string[];
 }

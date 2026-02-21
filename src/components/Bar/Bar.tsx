@@ -1,5 +1,9 @@
 "use client";
 
+import classNames from "classnames";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { useLikeTrack } from "../../app/hooks/useLikeTracks";
 import {
     playNext,
     playPrev,
@@ -7,11 +11,8 @@ import {
     setVolume,
     toggleRepeat,
     toggleShuffle,
-} from "@/store/features/trackSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import classNames from "classnames";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+} from "../../store/features/trackSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Bar.module.css";
 import { formatTime } from "@/utils/formatTime";
@@ -24,12 +25,16 @@ export const Bar = () => {
     const isRepeat = useAppSelector((state) => state.tracks.isRepeat);
     const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
     const volume = useAppSelector((state) => state.tracks.volume);
+    const isAuthenticated = useAppSelector(
+        (state) => state.auth.isAuthenticated
+    );
     const [isLoadedTrack, setIsLoadedTrack] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isSeeking, setIsSeeking] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [prevVolume, setPrevVolume] = useState(0.5);
+    const { toggleLike, isLike } = useLikeTrack(currentTrack || null);
 
     useEffect(() => {
         if (!audioRef.current) return;
@@ -126,6 +131,17 @@ export const Bar = () => {
         }
     };
 
+    const handleLikeClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!currentTrack) return;
+
+        if (isAuthenticated) {
+            toggleLike();
+        } else {
+            alert("Чтобы лайкнуть трек необходимо зарегистрироваться");
+        }
+    };
+
     if (!currentTrack) return <></>;
 
     return (
@@ -169,7 +185,7 @@ export const Bar = () => {
                                 onClick={() => dispatch(playPrev())}
                             >
                                 <svg className={styles.player__btnPrevSvg}>
-                                    <use xlinkHref="/images/icons/prev.svg"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-prev"></use>
                                 </svg>
                             </div>
                             <div
@@ -184,11 +200,11 @@ export const Bar = () => {
                             >
                                 {isPlay ? (
                                     <svg className={styles.player__btnPauseSvg}>
-                                        <use xlinkHref="/images/icons/pause.svg"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-pause"></use>
                                     </svg>
                                 ) : (
                                     <svg className={styles.player__btnPlaySvg}>
-                                        <use xlinkHref="/images/icons/play.svg"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-play"></use>
                                     </svg>
                                 )}
                             </div>
@@ -197,7 +213,7 @@ export const Bar = () => {
                                 onClick={() => dispatch(playNext())}
                             >
                                 <svg className={styles.player__btnNextSvg}>
-                                    <use xlinkHref="/images/icons/next.svg"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-next"></use>
                                 </svg>
                             </div>
                             <div
@@ -215,7 +231,7 @@ export const Bar = () => {
                                         }
                                     )}
                                 >
-                                    <use xlinkHref="/images/icons/repeat.svg"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-repeat"></use>
                                 </svg>
                             </div>
                             <div
@@ -233,7 +249,7 @@ export const Bar = () => {
                                         }
                                     )}
                                 >
-                                    <use xlinkHref="/images/icons/shuffle.svg"></use>
+                                    <use xlinkHref="/images/icons/sprite.svg#icon-shuffle"></use>
                                 </svg>
                             </div>
                         </div>
@@ -247,7 +263,7 @@ export const Bar = () => {
                             <div className={styles.trackPlay__contain}>
                                 <div className={styles.trackPlay__image}>
                                     <svg className={styles.trackPlay__svg}>
-                                        <use xlinkHref="/images/icons/note.svg"></use>
+                                        <use xlinkHref="/images/icons/sprite.svg#icon-note"></use>
                                     </svg>
                                 </div>
                                 <div className={styles.trackPlay__author}>
@@ -271,24 +287,16 @@ export const Bar = () => {
                             <div className={styles.trackPlay__dislike}>
                                 <div
                                     className={classNames(
-                                        styles.player__btnShuffle,
-                                        styles.btnIcon
+                                        styles.trackPlay__like
                                     )}
-                                >
-                                    <svg className={styles.trackPlay__likeSvg}>
-                                        <use xlinkHref="/images/icons/like.svg"></use>
-                                    </svg>
-                                </div>
-                                <div
-                                    className={classNames(
-                                        styles.trackPlay__dislike,
-                                        styles.btnIcon
-                                    )}
+                                    onClick={handleLikeClick}
                                 >
                                     <svg
-                                        className={styles.trackPlay__dislikeSvg}
+                                        className={`${styles.trackPlay__likeSvg} ${isLike ? styles.liked : ""} ${isAuthenticated ? "" : styles.dislike}`}
                                     >
-                                        <use xlinkHref="/images/icons/dislike.svg"></use>
+                                        <use
+                                            xlinkHref={`/images/icons/sprite.svg#${isAuthenticated ? "icon-like" : "icon-dislike"}`}
+                                        ></use>
                                     </svg>
                                 </div>
                             </div>
@@ -302,12 +310,8 @@ export const Bar = () => {
                             >
                                 <svg className={styles.volume__svg}>
                                     <use
-                                        xlinkHref={
-                                            isMuted || volume === 0
-                                                ? "/images/icons/mute.svg"
-                                                : "/images/icons/volume.svg"
-                                        }
-                                    />
+                                        xlinkHref={`/images/icons/sprite.svg#${isMuted || volume === 0 ? "icon-mute" : "icon-volume"}`}
+                                    ></use>
                                 </svg>
                             </div>
                             <div
