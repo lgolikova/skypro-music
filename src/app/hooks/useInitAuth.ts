@@ -17,8 +17,8 @@ export const useInitAuth = () => {
                 dispatch(
                     setCredentials({
                         user,
-                        access: access ?? null,
-                        refresh: refresh ?? null,
+                        access: access || undefined,
+                        refresh: refresh || undefined,
                     })
                 );
             }
