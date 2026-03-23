@@ -383,11 +383,6 @@
     stroke: #ffffff;
 }
 
-/* .btnIcon:active .trackPlay__likeSvg,
-.btnIcon:active .trackPlay__dislikeSvg {
-    fill: #696969;
-    stroke: #ffffff;
-} */
 .trackPlay__like {
     padding: 10px;
 }
